@@ -1,5 +1,6 @@
 package com.ninjaone.rmmrestapi.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,6 +8,8 @@ import javax.persistence.Id;
 public class Sample {
     @Id
     private String id;
+
+    @Column(name = "`value`")
     private String value;
 
     public Sample(){}
