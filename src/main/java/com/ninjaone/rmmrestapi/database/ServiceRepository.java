@@ -1,8 +1,9 @@
 package com.ninjaone.rmmrestapi.database;
 
-import com.ninjaone.rmmrestapi.model.Sample;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import com.ninjaone.rmmrestapi.model.Service;
+
 @Repository
-public interface SampleRepository extends CrudRepository<Sample, String> {}
+public interface ServiceRepository extends CrudRepository<Service, Integer> {}
