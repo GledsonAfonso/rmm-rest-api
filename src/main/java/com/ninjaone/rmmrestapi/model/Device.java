@@ -16,6 +16,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ninjaone.rmmrestapi.dto.DeviceRequestDto;
+import com.ninjaone.rmmrestapi.dto.ServiceRequestDto;
 
 @Entity
 @Table(name = "device", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "type" }))
@@ -59,6 +60,10 @@ public class Device {
     this.name = dto.getName();
     this.type = dto.getType();
     this.services = new ArrayList<>();
+  }
+
+  public Device(ServiceRequestDto request) {
+    this.id = request.getDeviceId();
   }
 
   public void setDtoInfo(DeviceRequestDto dto) {

@@ -3,6 +3,7 @@ package com.ninjaone.rmmrestapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.util.Streamable;
 
 import com.ninjaone.rmmrestapi.database.ServiceRepository;
@@ -16,7 +17,7 @@ public class ServiceService {
         this.repository = repository;
     }
 
-    public Service save(Service entity) {
+    public Service save(Service entity) throws ConstraintViolationException {
         return repository.save(entity);
     }
 
