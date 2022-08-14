@@ -31,6 +31,11 @@ public class Service {
     this.type = type;
   }
 
+  public Service(ServiceType type, Device device) {
+    this.type = type;
+    this.device = device;
+  }
+
   public Integer getId() {
     return id;
   }
@@ -45,5 +50,9 @@ public class Service {
 
   public void setType(ServiceType type) {
     this.type = type;
+  }
+
+  public Device getDevice() {
+    return device;
   }
 }

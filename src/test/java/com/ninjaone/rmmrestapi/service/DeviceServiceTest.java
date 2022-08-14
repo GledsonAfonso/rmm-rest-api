@@ -15,12 +15,12 @@ import com.ninjaone.rmmrestapi.model.DeviceType;
 @IntegrationTest
 public class DeviceServiceTest {
   @Autowired
-  private DeviceService service;
+  private DeviceService deviceService;
 
   @Test
   @DisplayName("should be able to retrieve all registered devices")
   public void testGetAll() {
-    var devices = service.getAll();
+    var devices = this.deviceService.getAll();
     assertEquals(3, devices.size());
   }
 
@@ -28,40 +28,43 @@ public class DeviceServiceTest {
   @DisplayName("should be able to insert, read, update and delete new data")
   public void testCRUDForNewData() {
     var device = new Device("new device for testing", DeviceType.MAC);
-    var saveReturn = service.save(device);
+    var saveReturn = this.deviceService.save(device);
 
     final Integer id = saveReturn.getId();
     device.setId(id);
 
     assertTrue(saveReturn.equals(device));
 
-    var getAllResult = service.getAll();
+    var getAllResult = this.deviceService.getAll();
     assertEquals(4, getAllResult.size());
 
-    var getByIdResultOptional = service.getById(id);
+    var getByIdResultOptional = this.deviceService.getById(id);
     assertTrue(getByIdResultOptional.isPresent());
+    
     var getByIdResult = getByIdResultOptional.get();
-    assertEquals(getByIdResult.getId(), device.getId());
-    assertEquals(getByIdResult.getName(), device.getName());
-    assertEquals(getByIdResult.getType(), device.getType());
-    assertEquals(getByIdResult.getServices().size(), device.getServices().size());
+    assertEquals(device.getId(), getByIdResult.getId());
+    assertEquals(device.getName(), getByIdResult.getName());
+    assertEquals(device.getType(), getByIdResult.getType());
+    assertEquals(device.getServices().size(), getByIdResult.getServices().size());
 
     device.setName("new name");
-    service.save(device);
-    getByIdResultOptional = service.getById(id);
+    this.deviceService.save(device);
+    
+    getByIdResultOptional = this.deviceService.getById(id);
     assertTrue(getByIdResultOptional.isPresent());
+
     getByIdResult = getByIdResultOptional.get();
-    assertEquals(getByIdResult.getId(), device.getId());
-    assertEquals(getByIdResult.getName(), device.getName());
-    assertEquals(getByIdResult.getType(), device.getType());
-    assertEquals(getByIdResult.getServices().size(), device.getServices().size());
+    assertEquals(device.getId(), getByIdResult.getId());
+    assertEquals(device.getName(), getByIdResult.getName());
+    assertEquals(device.getType(), getByIdResult.getType());
+    assertEquals(device.getServices().size(), getByIdResult.getServices().size());
 
-    service.deleteById(id);
+    this.deviceService.deleteById(id);
 
-    getAllResult = service.getAll();
+    getAllResult = this.deviceService.getAll();
     assertEquals(3, getAllResult.size());
 
-    getByIdResultOptional = service.getById(id);
+    getByIdResultOptional = this.deviceService.getById(id);
     assertTrue(getByIdResultOptional.isEmpty());
   }
 
@@ -72,12 +75,12 @@ public class DeviceServiceTest {
     var device2 = new Device("new device for testing", DeviceType.MAC);
     var device3 = new Device("new device for testing", DeviceType.WINDOWS);
 
-    var saveDevice1Result = service.save(device1);
-    assertThrows(Exception.class, () -> service.save(device2));
+    var saveDevice1Result = this.deviceService.save(device1);
+    assertThrows(Exception.class, () -> this.deviceService.save(device2));
 
-    var saveDevice3Result = service.save(device3);
+    var saveDevice3Result = this.deviceService.save(device3);
 
-    service.deleteById(saveDevice1Result.getId());
-    service.deleteById(saveDevice3Result.getId());
+    this.deviceService.deleteById(saveDevice1Result.getId());
+    this.deviceService.deleteById(saveDevice3Result.getId());
   }
 }
