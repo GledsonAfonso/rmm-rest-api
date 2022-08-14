@@ -1,64 +1,66 @@
 package com.ninjaone.rmmrestapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ninjaone.rmmrestapi.database.DeviceRepository;
+import com.ninjaone.rmmrestapi.IntegrationTest;
 import com.ninjaone.rmmrestapi.model.Device;
 import com.ninjaone.rmmrestapi.model.DeviceType;
-import com.ninjaone.rmmrestapi.model.Service;
 
-@ExtendWith(MockitoExtension.class)
+@IntegrationTest
 public class DeviceServiceTest {
-    public static final Integer ID = 12345;
+  @Autowired
+  private DeviceService service;
 
-    @Mock
-    private DeviceRepository repository;
+  @Test
+  @DisplayName("should be able to retrieve all registered devices")
+  public void testGetAll() {
+    var devices = service.getAll();
+    assertEquals(3, devices.size());
+  }
 
-    @InjectMocks
-    private DeviceService testObject;
+  @Test
+  @DisplayName("should be able to insert, read, update and delete new data")
+  public void testCRUDForNewData() {
+    var device = new Device("new device for testing", DeviceType.MAC);
+    var saveReturn = service.save(device);
 
-    private Device entity;
+    final Integer id = saveReturn.getId();
+    device.setId(id);
 
-    @BeforeEach
-    void setup() {
-        entity = new Device(ID, "device 12345", DeviceType.WINDOWS, new ArrayList<Service>());
-    }
+    assertTrue(saveReturn.equals(device));
 
-    @Test
-    void getDeviceData() {
-        when(repository.findById(ID)).thenReturn(Optional.of(entity));
-        Optional<Device> entityOptional = testObject.getById(ID);
-        Device actualEntity = entityOptional.orElse(null);
-        assert actualEntity != null;
-        assertEquals(entity.getName(), actualEntity.getName());
-        assertEquals(entity.getType().toString(), actualEntity.getType().toString());
-        assertEquals(entity.getServices().size(), actualEntity.getServices().size());
-    }
+    var getAllResult = service.getAll();
+    assertEquals(4, getAllResult.size());
 
-    @Test
-    void saveDeviceData() {
-        when(repository.save(entity)).thenReturn(entity);
-        assertEquals(entity, testObject.save(entity));
-    }
+    var getByIdResultOptional = service.getById(id);
+    assertTrue(getByIdResultOptional.isPresent());
+    var getByIdResult = getByIdResultOptional.get();
+    assertEquals(getByIdResult.getId(), device.getId());
+    assertEquals(getByIdResult.getName(), device.getName());
+    assertEquals(getByIdResult.getType(), device.getType());
+    assertEquals(getByIdResult.getServices().size(), device.getServices().size());
 
-    @Test
-    void deleteDeviceData() {
-        doNothing().when(repository).deleteById(ID);
-        testObject.deleteById(ID);
-        Mockito.verify(repository, times(1)).deleteById(ID);
-    }
+    device.setName("new name");
+    service.save(device);
+    getByIdResultOptional = service.getById(id);
+    assertTrue(getByIdResultOptional.isPresent());
+    getByIdResult = getByIdResultOptional.get();
+    assertEquals(getByIdResult.getId(), device.getId());
+    assertEquals(getByIdResult.getName(), device.getName());
+    assertEquals(getByIdResult.getType(), device.getType());
+    assertEquals(getByIdResult.getServices().size(), device.getServices().size());
+
+    service.deleteById(id);
+
+    getAllResult = service.getAll();
+    assertEquals(3, getAllResult.size());
+
+    getByIdResultOptional = service.getById(id);
+    assertTrue(getByIdResultOptional.isEmpty());
+  }
 }

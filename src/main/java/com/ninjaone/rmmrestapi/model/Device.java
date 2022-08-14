@@ -6,29 +6,28 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "DEVICE")
+@Table(name = "device")
 public class Device {
   @Id
-  @GeneratedValue
-  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", updatable = false, nullable = false, unique = true)
   private Integer id;
 
   @Column(name = "name")
   private String name;
 
-  @Enumerated(EnumType.STRING)
   @Column(name = "type")
   private DeviceType type;
 
-  @OneToMany(mappedBy = "device")
+  @OneToMany(mappedBy = "device", fetch = FetchType.EAGER)
   @Column(name = "service_id")
   private List<Service> services = new ArrayList<>();
 
@@ -42,12 +41,26 @@ public class Device {
     this.services = services;
   }
 
+  public Device(String name, DeviceType type) {
+    this.name = name;
+    this.type = type;
+    this.services = new ArrayList<>();
+  }
+
   public Integer getId() {
     return id;
   }
 
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
   public String getName() {
     return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public DeviceType getType() {

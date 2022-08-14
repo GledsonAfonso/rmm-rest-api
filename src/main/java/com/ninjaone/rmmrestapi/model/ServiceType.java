@@ -1,5 +1,7 @@
 package com.ninjaone.rmmrestapi.model;
 
+import java.util.stream.Stream;
+
 public enum ServiceType {
   ANTIVIRUS("antivirus"),
   BACKUP("backup"),
@@ -8,12 +10,18 @@ public enum ServiceType {
 
   private final String value;
 
-  ServiceType(final String value) {
+  private ServiceType(final String value) {
     this.value = value;
   }
 
-  @Override
-  public String toString() {
-    return this.value;
+  public String getValue() {
+    return value;
+  }
+
+  public static ServiceType of(String serviceTypeAsString) {
+    return Stream.of(ServiceType.values())
+      .filter(device -> device.getValue().equalsIgnoreCase(serviceTypeAsString))
+      .findFirst()
+      .orElseThrow(IllegalArgumentException::new);
   }
 }
