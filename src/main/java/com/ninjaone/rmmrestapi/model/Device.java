@@ -14,22 +14,29 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ninjaone.rmmrestapi.dto.DeviceRequestDto;
+
 @Entity
 @Table(name = "device", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "type" }))
 public class Device {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", updatable = false, nullable = false, unique = true)
+  @JsonProperty("id")
   private Integer id;
 
   @Column(name = "name")
+  @JsonProperty("name")
   private String name;
 
   @Column(name = "type")
+  @JsonProperty("type")
   private DeviceType type;
 
   @OneToMany(mappedBy = "device", fetch = FetchType.EAGER)
   @Column(name = "service_id")
+  @JsonProperty("services")
   private List<Service> services = new ArrayList<>();
 
   public Device() {
@@ -46,6 +53,17 @@ public class Device {
     this.name = name;
     this.type = type;
     this.services = new ArrayList<>();
+  }
+
+  public Device(DeviceRequestDto dto) {
+    this.name = dto.getName();
+    this.type = dto.getType();
+    this.services = new ArrayList<>();
+  }
+
+  public void setDtoInfo(DeviceRequestDto dto) {
+    this.name = dto.getName();
+    this.type = dto.getType();
   }
 
   public Integer getId() {

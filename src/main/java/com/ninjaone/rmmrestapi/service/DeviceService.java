@@ -3,6 +3,7 @@ package com.ninjaone.rmmrestapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class DeviceService {
         this.repository = repository;
     }
 
-    public Device save(Device entity) {
+    public Device save(Device entity) throws ConstraintViolationException {
         return repository.save(entity);
     }
 

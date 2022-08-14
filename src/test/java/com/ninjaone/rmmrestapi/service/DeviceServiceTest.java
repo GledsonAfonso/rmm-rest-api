@@ -19,26 +19,26 @@ public class DeviceServiceTest {
 
   @Test
   @DisplayName("should be able to retrieve all registered devices")
-  public void testGetAll() {
-    var devices = this.deviceService.getAll();
+  void testGetAll() {
+    var devices = deviceService.getAll();
     assertEquals(3, devices.size());
   }
 
   @Test
   @DisplayName("should be able to insert, read, update and delete new data")
-  public void testCRUDForNewData() {
+  void testCRUDForNewData() {
     var device = new Device("new device for testing", DeviceType.MAC);
-    var saveReturn = this.deviceService.save(device);
+    var saveReturn = deviceService.save(device);
 
     final Integer id = saveReturn.getId();
     device.setId(id);
 
     assertTrue(saveReturn.equals(device));
 
-    var getAllResult = this.deviceService.getAll();
+    var getAllResult = deviceService.getAll();
     assertEquals(4, getAllResult.size());
 
-    var getByIdResultOptional = this.deviceService.getById(id);
+    var getByIdResultOptional = deviceService.getById(id);
     assertTrue(getByIdResultOptional.isPresent());
     
     var getByIdResult = getByIdResultOptional.get();
@@ -48,9 +48,9 @@ public class DeviceServiceTest {
     assertEquals(device.getServices().size(), getByIdResult.getServices().size());
 
     device.setName("new name");
-    this.deviceService.save(device);
+    deviceService.save(device);
     
-    getByIdResultOptional = this.deviceService.getById(id);
+    getByIdResultOptional = deviceService.getById(id);
     assertTrue(getByIdResultOptional.isPresent());
 
     getByIdResult = getByIdResultOptional.get();
@@ -59,28 +59,28 @@ public class DeviceServiceTest {
     assertEquals(device.getType(), getByIdResult.getType());
     assertEquals(device.getServices().size(), getByIdResult.getServices().size());
 
-    this.deviceService.deleteById(id);
+    deviceService.deleteById(id);
 
-    getAllResult = this.deviceService.getAll();
+    getAllResult = deviceService.getAll();
     assertEquals(3, getAllResult.size());
 
-    getByIdResultOptional = this.deviceService.getById(id);
+    getByIdResultOptional = deviceService.getById(id);
     assertTrue(getByIdResultOptional.isEmpty());
   }
 
   @Test
   @DisplayName("should not allow duplication of devices")
-  public void testDuplicateDevices() {
+  void testDuplicateDevices() {
     var device1 = new Device("new device for testing", DeviceType.MAC);
     var device2 = new Device("new device for testing", DeviceType.MAC);
     var device3 = new Device("new device for testing", DeviceType.WINDOWS);
 
-    var saveDevice1Result = this.deviceService.save(device1);
-    assertThrows(Exception.class, () -> this.deviceService.save(device2));
+    var saveDevice1Result = deviceService.save(device1);
+    assertThrows(Exception.class, () -> deviceService.save(device2));
 
-    var saveDevice3Result = this.deviceService.save(device3);
+    var saveDevice3Result = deviceService.save(device3);
 
-    this.deviceService.deleteById(saveDevice1Result.getId());
-    this.deviceService.deleteById(saveDevice3Result.getId());
+    deviceService.deleteById(saveDevice1Result.getId());
+    deviceService.deleteById(saveDevice3Result.getId());
   }
 }

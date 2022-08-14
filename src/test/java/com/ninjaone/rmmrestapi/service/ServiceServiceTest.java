@@ -27,39 +27,39 @@ public class ServiceServiceTest {
   private Device deviceEntity;
 
   @BeforeAll
-  public void beforeAll() {
-    this.deviceEntity = new Device("new device", DeviceType.MAC);
-    var deviceSaveResult = this.deviceService.save(this.deviceEntity);
-    this.deviceEntity.setId(deviceSaveResult.getId());
+  void beforeAll() {
+    deviceEntity = new Device("new device", DeviceType.MAC);
+    var deviceSaveResult = deviceService.save(deviceEntity);
+    deviceEntity.setId(deviceSaveResult.getId());
   }
 
   @AfterAll
-  public void afterAll() {
-    this.deviceService.deleteById(this.deviceEntity.getId());
+  void afterAll() {
+    deviceService.deleteById(deviceEntity.getId());
   }
 
   @Test
   @DisplayName("should be able to retrieve all registered services")
-  public void testGetAll() {
-    var services = this.serviceService.getAll();
+  void testGetAll() {
+    var services = serviceService.getAll();
     assertEquals(11, services.size());
   }
 
   @Test
   @DisplayName("should be able to insert, read, and delete new data")
-  public void testCRUDForNewData() {
-    var service = new Service(ServiceType.ANTIVIRUS, this.deviceEntity);
-    var saveReturn = this.serviceService.save(service);
+  void testCRUDForNewData() {
+    var service = new Service(ServiceType.ANTIVIRUS, deviceEntity);
+    var saveReturn = serviceService.save(service);
 
     final Integer id = saveReturn.getId();
     service.setId(id);
 
     assertTrue(saveReturn.equals(service));
 
-    var getAllResult = this.serviceService.getAll();
+    var getAllResult = serviceService.getAll();
     assertEquals(12, getAllResult.size());
 
-    var getByIdResultOptional = this.serviceService.getById(id);
+    var getByIdResultOptional = serviceService.getById(id);
     assertTrue(getByIdResultOptional.isPresent());
 
     var getByIdResult = getByIdResultOptional.get();
@@ -67,33 +67,33 @@ public class ServiceServiceTest {
     assertEquals(service.getType(), getByIdResult.getType());
 
     var getByIdResultDevice = getByIdResult.getDevice();
-    assertEquals(this.deviceEntity.getId(), getByIdResultDevice.getId());
-    assertEquals(this.deviceEntity.getName(), getByIdResultDevice.getName());
-    assertEquals(this.deviceEntity.getType(), getByIdResultDevice.getType());
+    assertEquals(deviceEntity.getId(), getByIdResultDevice.getId());
+    assertEquals(deviceEntity.getName(), getByIdResultDevice.getName());
+    assertEquals(deviceEntity.getType(), getByIdResultDevice.getType());
     assertEquals(1, getByIdResultDevice.getServices().size());
 
-    this.serviceService.deleteById(id);
+    serviceService.deleteById(id);
 
-    getAllResult = this.serviceService.getAll();
+    getAllResult = serviceService.getAll();
     assertEquals(11, getAllResult.size());
 
-    getByIdResultOptional = this.serviceService.getById(id);
+    getByIdResultOptional = serviceService.getById(id);
     assertTrue(getByIdResultOptional.isEmpty());
   }
 
   @Test
   @DisplayName("should not allow duplication of services")
-  public void testDuplicateDevices() {
-    var service1 = new Service(ServiceType.ANTIVIRUS, this.deviceEntity);
-    var service2 = new Service(ServiceType.ANTIVIRUS, this.deviceEntity);
-    var service3 = new Service(ServiceType.BACKUP, this.deviceEntity);
+  void testDuplicateDevices() {
+    var service1 = new Service(ServiceType.ANTIVIRUS, deviceEntity);
+    var service2 = new Service(ServiceType.ANTIVIRUS, deviceEntity);
+    var service3 = new Service(ServiceType.BACKUP, deviceEntity);
 
-    var saveService1Result = this.serviceService.save(service1);
-    assertThrows(Exception.class, () -> this.serviceService.save(service2));
+    var saveService1Result = serviceService.save(service1);
+    assertThrows(Exception.class, () -> serviceService.save(service2));
 
-    var saveService3Result = this.serviceService.save(service3);
+    var saveService3Result = serviceService.save(service3);
 
-    this.serviceService.deleteById(saveService1Result.getId());
-    this.serviceService.deleteById(saveService3Result.getId());
+    serviceService.deleteById(saveService1Result.getId());
+    serviceService.deleteById(saveService3Result.getId());
   }
 }
