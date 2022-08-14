@@ -1,6 +1,7 @@
 package com.ninjaone.rmmrestapi.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -62,5 +63,21 @@ public class DeviceServiceTest {
 
     getByIdResultOptional = service.getById(id);
     assertTrue(getByIdResultOptional.isEmpty());
+  }
+
+  @Test
+  @DisplayName("should not allow duplication of devices")
+  public void testDuplicateDevices() {
+    var device1 = new Device("new device for testing", DeviceType.MAC);
+    var device2 = new Device("new device for testing", DeviceType.MAC);
+    var device3 = new Device("new device for testing", DeviceType.WINDOWS);
+
+    var saveDevice1Result = service.save(device1);
+    assertThrows(Exception.class, () -> service.save(device2));
+
+    var saveDevice3Result = service.save(device3);
+
+    service.deleteById(saveDevice1Result.getId());
+    service.deleteById(saveDevice3Result.getId());
   }
 }

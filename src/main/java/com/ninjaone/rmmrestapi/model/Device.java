@@ -12,9 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "device")
+@Table(name = "device", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "type" }))
 public class Device {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

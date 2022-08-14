@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = {"type", "device_id"}))
+@Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = { "type", "device_id" }))
 public class Service {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
