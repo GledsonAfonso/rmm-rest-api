@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,11 @@ public class ServiceServiceTest {
     this.deviceEntity = new Device("new device", DeviceType.MAC);
     var deviceSaveResult = this.deviceService.save(this.deviceEntity);
     this.deviceEntity.setId(deviceSaveResult.getId());
+  }
+
+  @AfterAll
+  public void afterAll() {
+    this.deviceService.deleteById(this.deviceEntity.getId());
   }
 
   @Test
