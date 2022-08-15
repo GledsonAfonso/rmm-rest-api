@@ -2,6 +2,8 @@ package com.ninjaone.rmmrestapi.model;
 
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ServiceType {
   ANTIVIRUS("antivirus"),
   BACKUP("backup"),
@@ -14,6 +16,7 @@ public enum ServiceType {
     this.value = value;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }

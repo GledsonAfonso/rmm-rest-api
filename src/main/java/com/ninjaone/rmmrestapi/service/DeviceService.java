@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class DeviceService {
     }
 
     public void deleteById(Integer id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {}
     }
 }

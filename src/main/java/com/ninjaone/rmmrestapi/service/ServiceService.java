@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.util.Streamable;
 
 import com.ninjaone.rmmrestapi.database.ServiceRepository;
@@ -30,6 +31,8 @@ public class ServiceService {
     }
 
     public void deleteById(Integer id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {}
     }
 }

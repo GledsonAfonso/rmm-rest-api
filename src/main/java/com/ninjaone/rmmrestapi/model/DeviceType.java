@@ -2,6 +2,8 @@ package com.ninjaone.rmmrestapi.model;
 
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum DeviceType {
   WINDOWS("windows"),
   MAC("mac");
@@ -12,6 +14,7 @@ public enum DeviceType {
     this.value = value;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }

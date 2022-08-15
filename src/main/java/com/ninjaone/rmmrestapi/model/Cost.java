@@ -2,12 +2,25 @@ package com.ninjaone.rmmrestapi.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Cost {
+  @JsonProperty("devices_cost")
   private BigDecimal devicesCost;
+
+  @JsonProperty("antivirus_cost")
   private BigDecimal antivirusCost;
+
+  @JsonProperty("backup_cost")
   private BigDecimal backupCost;
+
+  @JsonProperty("psa_cost")
   private BigDecimal psaCost;
+
+  @JsonProperty("screen_share")
   private BigDecimal screenShare;
+
+  @JsonProperty("total_cost")
   private BigDecimal totalCost;
 
   public Cost() {

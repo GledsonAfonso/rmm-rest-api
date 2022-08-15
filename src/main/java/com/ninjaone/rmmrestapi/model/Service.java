@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "service", uniqueConstraints = @UniqueConstraint(columnNames = { "type", "device_id" }))
 public class Service {
@@ -21,6 +23,7 @@ public class Service {
   private ServiceType type;
 
   @ManyToOne
+  @JsonIgnore
   private Device device;
 
   public Service() {

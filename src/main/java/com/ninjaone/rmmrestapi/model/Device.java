@@ -67,8 +67,13 @@ public class Device {
   }
 
   public void setDtoInfo(DeviceRequestDto dto) {
-    this.name = dto.getName();
-    this.type = dto.getType();
+    if (dto.getName() != null) {
+      this.name = dto.getName();
+    }
+
+    if (dto.getType() != null) {
+      this.type = dto.getType();
+    }
   }
 
   public Integer getId() {
