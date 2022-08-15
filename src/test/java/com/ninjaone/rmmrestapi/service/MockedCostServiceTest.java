@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -116,5 +117,20 @@ public class MockedCostServiceTest {
         assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getPsaCost());
         assertEquals(BigDecimal.valueOf(5), totalMonthlyCost.getScreenShare());
         assertEquals(BigDecimal.valueOf(71), totalMonthlyCost.getTotalCost());
+    }
+
+    @Test
+    @DisplayName("should give a zeroed cost result when there's no devices and services registered")
+    void getZeroCostCaseTest() {
+        var customEntities = new ArrayList<Device>();
+        when(deviceService.getAll()).thenReturn(customEntities);
+
+        var totalMonthlyCost = costService.getCurrentMonthlyCost();
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getDevicesCost());
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getAntivirusCost());
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getBackupCost());
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getPsaCost());
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getScreenShare());
+        assertEquals(BigDecimal.valueOf(0), totalMonthlyCost.getTotalCost());
     }
 }
