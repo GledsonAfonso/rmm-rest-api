@@ -3,7 +3,7 @@ package com.ninjaone.rmmrestapi.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.util.Streamable;
 
@@ -18,7 +18,7 @@ public class ServiceService {
         this.repository = repository;
     }
 
-    public Service save(Service entity) throws ConstraintViolationException {
+    public Service save(Service entity) throws DataIntegrityViolationException {
         return repository.save(entity);
     }
 

@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -88,7 +88,7 @@ public class ServiceControllerTest {
     @DisplayName("should return an HTTP status code of 400 when trying to duplicate a service")
     void postDuplicateServiceData() throws Exception {
         when(deviceService.getById(ID)).thenReturn(Optional.of(deviceEntity));
-        when(serviceService.save(any())).thenThrow(ConstraintViolationException.class);
+        when(serviceService.save(any())).thenThrow(DataIntegrityViolationException.class);
 
         var request = new ServiceRequestDto();
         request.setType(serviceEntity.getType());

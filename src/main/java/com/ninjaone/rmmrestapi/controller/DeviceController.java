@@ -2,7 +2,7 @@ package com.ninjaone.rmmrestapi.controller;
 
 import java.util.List;
 
-import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +34,7 @@ public class DeviceController {
         try {
             var savedEntity = service.save(entity);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedEntity);
-        } catch (ConstraintViolationException exception) {
+        } catch (DataIntegrityViolationException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -73,7 +73,7 @@ public class DeviceController {
             try {
                 var savedEntity = service.save(device);
                 return ResponseEntity.accepted().body(savedEntity);
-            } catch (ConstraintViolationException exception) {
+            } catch (DataIntegrityViolationException exception) {
                 return ResponseEntity.badRequest().build();
             }
         } else {

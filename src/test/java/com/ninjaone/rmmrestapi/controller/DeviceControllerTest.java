@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -82,7 +82,7 @@ public class DeviceControllerTest {
     @Test
     @DisplayName("should return an HTTP status code of 400 when trying to duplicate a device")
     void postDuplicateServiceData() throws Exception {
-        when(service.save(any())).thenThrow(ConstraintViolationException.class);
+        when(service.save(any())).thenThrow(DataIntegrityViolationException.class);
 
         var request = new DeviceRequestDto();
         request.setName(entity.getName());
@@ -155,7 +155,7 @@ public class DeviceControllerTest {
     @DisplayName("should return an HTTP status of 400 when trying to duplicate devices through the put method")
     void putDuplicateTest() throws Exception {
         when(service.getById(ID)).thenReturn(Optional.of(entity));
-        when(service.save(any())).thenThrow(ConstraintViolationException.class);
+        when(service.save(any())).thenThrow(DataIntegrityViolationException.class);
 
         var request = new DeviceRequestDto();
         request.setName(entity.getName());
