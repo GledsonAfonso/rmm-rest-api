@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ public class Device {
   @JsonProperty("type")
   private DeviceType type;
 
-  @OneToMany(mappedBy = "device", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "device", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
   @Column(name = "service_id")
   @JsonProperty("services")
   private List<Service> services = new ArrayList<>();
