@@ -30,14 +30,12 @@ public class JwtFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     var authHeader = request.getHeader("Authorization");
 
-    if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
-      var jwt = authHeader.substring(7);
-
-      if (jwt == null || jwt.isBlank()) {
+    if (authHeader != null && !authHeader.isBlank()) {
+      if (authHeader == null || authHeader.isBlank()) {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token in Bearer Header");
       } else {
         try {
-          var email = jwtUtil.validateTokenAndRetrieveSubject(jwt);
+          var email = jwtUtil.validateTokenAndRetrieveSubject(authHeader);
           var userDetails = userDetailsService.loadUserByUsername(email);
           var authToken = new UsernamePasswordAuthenticationToken(email, userDetails.getPassword(), userDetails.getAuthorities());
           

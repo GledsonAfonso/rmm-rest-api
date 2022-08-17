@@ -1,8 +1,8 @@
 package com.ninjaone.rmmrestapi.controller;
 
-import java.util.Collections;
-import java.util.Map;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ninjaone.rmmrestapi.configuration.JwtUtil;
 import com.ninjaone.rmmrestapi.database.UserRepository;
+import com.ninjaone.rmmrestapi.dto.TokenDto;
 import com.ninjaone.rmmrestapi.dto.UserDto;
 import com.ninjaone.rmmrestapi.model.User;
 
@@ -33,27 +34,27 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public Map<String, Object> register(@RequestBody User user) {
+  public ResponseEntity<TokenDto> register(@RequestBody User user) {
     var encodedPass = this.passwordEncoder.encode(user.getPassword());
     user.setPassword(encodedPass);
     user = this.userRepository.save(user);
 
     var token = this.jwtUtil.generateToken(user.getEmail());
 
-    return Collections.singletonMap("jwt-token", token);
+    return ResponseEntity.ok(new TokenDto(token));
   }
 
   @PostMapping("/login")
-  public Map<String, Object> login(@RequestBody UserDto user) {
+  public ResponseEntity<TokenDto> login(@RequestBody UserDto user) {
     try {
       var authInputToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
       this.authenticationManager.authenticate(authInputToken);
 
       var token = this.jwtUtil.generateToken(user.getEmail());
 
-      return Collections.singletonMap("jwt-token", token);
-    } catch (AuthenticationException exception) {
-      throw new RuntimeException("Invalid Login Credentials");
+      return ResponseEntity.ok(new TokenDto(token));
+    } catch (AuthenticationException | AccessDeniedException exception) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }
 

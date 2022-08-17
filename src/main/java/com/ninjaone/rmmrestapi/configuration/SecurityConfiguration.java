@@ -35,7 +35,7 @@ public class SecurityConfiguration {
         .and()
         .authorizeHttpRequests()
         .antMatchers("/auth/**").permitAll()
-        .antMatchers("/user/**").hasRole("USER")
+        .antMatchers("/**").hasRole("USER")
         .and()
         .userDetailsService(myUserDetailsService)
         .exceptionHandling()

@@ -22,5 +22,4 @@ public class UserController {
     var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return repository.findByEmail(email).get();
   }
-
 }

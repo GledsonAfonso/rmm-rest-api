@@ -2,19 +2,16 @@ package com.ninjaone.rmmrestapi.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
+@Table(name = "`user`")
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", updatable = false, nullable = false, unique = true)
-  private Long id;
-
+  @Column(name = "email", nullable = false, unique = true)
   @JsonProperty("email")
   private String email;
 
@@ -22,14 +19,6 @@ public class User {
   private String password;
 
   public User() {
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getEmail() {
@@ -46,10 +35,5 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  @Override
-  public String toString() {
-    return "User [email=" + email + ", id=" + id + ", password=" + password + "]";
   }
 }
