@@ -1,3 +1,9 @@
+general:
+  expiration-time: 900_000
+  secret: eyJhbGciOiJIUzUxMiJ9.ew0KICAic3ViIjogIjEyMzQ1Njc4OTAiLA0KICAibmFtZSI6ICJBbmlzaCBOYXRoIiwNCiAgImlhdCI6IDE1MTYyMzkwMjINCn0.yvOlqnfdOMmildToNNBxlOGx4Dlzgl8L2_PQvRBjL1ydw6YDoL8uzOM1UmtLOE-nj2Emd4I07BUUGp5l9YKr2Q
+  token-prefix: "Bearer "
+  header-key: Authorization
+
 spring:
   datasource:
     url: jdbc:h2:mem:localdb
