@@ -45,9 +45,9 @@ public class DeviceController {
 
         if (!results.isEmpty()) {
             return ResponseEntity.ok(results);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
+
     }
 
     @GetMapping("/{id}")
@@ -57,9 +57,8 @@ public class DeviceController {
         if (result.isPresent()) {
             var device = result.get();
             return ResponseEntity.ok(device);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
